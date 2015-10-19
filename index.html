@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+
+<head>
+    <title>Clock Sequencer</title>
+    <meta http-equiv="Cache-control" content="no-cache" />
+    <!-- Bootstrap core CSS -->
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/footer.css" rel="stylesheet">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/jquery.iphonepicker.min.js"></script>
+    <script type="text/javascript" src="js/sequencer.js"></script>
+</head>
+
+<body>
+    <div class="container clock">
+        <h1>Clock Sequencer</h1>
+        <div class="row">
+            <div class="col-sm-3">
+                <h4>Midi Device:</h4></div>
+            <div class="col-sm-3">
+                <h4>BPM:</h4></div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <select id="midiOut" onchange="changeMIDIOut()">
+                    <option value="">Not connected</option>
+                </select>
+            </div>
+            <div class="col-sm-3">
+                <select id="bpm" onchange="changeBPM()">
+                </select>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-sm-3">
+                <button type="button" onclick="play()" class="btn btn-success">Play</button>
+                <button type="button" onclick="stop()" class="btn btn-danger">Stop</button>
+            </div>
+        </div>
+    </div>
+    <footer class="page-row">
+        <p class="text-muted credit">Site created by <a href="http://www.alexkort.com">Alex Kort</a>.</p>
+    </footer>
+</body>
+
+</html>
