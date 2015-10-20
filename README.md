@@ -1,4 +1,4 @@
-# WebMidiClockSequencer
+# Web Midi Clock Sequencer
 A simple clock output sequencer for Web Midi API
 
 #Synopsis
