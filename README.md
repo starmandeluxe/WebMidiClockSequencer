@@ -13,4 +13,8 @@ This is a sample project to demonstrate the Web Midi API's MIDI OUT functionalit
 #Issues
 - The selection wheels are not yet working properly on touch screen devices. A fix for this will come soon.
 - Changing browser windows stops the Midi clock. This could be caused by the Javascript timer thread being suspended when focus is lost. I will investigate.
+- (Potential Issue) latency is untested as of yet, so the potential for sync is still not known.
+
+#Roadmap
+I am planning to add additional functionality for a full-on step sequencer that can output notes, velocity, scales, different step lengths, etc. However, my main goal with this project is for clock syncing with a mobile device or PC, so I will first be adding features that support sync.
 
