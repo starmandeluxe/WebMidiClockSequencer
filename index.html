@@ -4,13 +4,14 @@
 <head>
     <title>Clock Sequencer</title>
     <meta http-equiv="Cache-control" content="no-cache" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap core CSS -->
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/footer.css" rel="stylesheet">
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="js/jquery.iphonepicker.min.js"></script>
+    <script type="text/javascript" src="js/jquery.iphonepicker.js"></script>
     <script type="text/javascript" src="js/sequencer.js"></script>
 </head>
 
@@ -18,26 +19,31 @@
     <div class="container clock">
         <h1>Clock Sequencer</h1>
         <div class="row">
-            <div class="col-sm-3">
-                <h4>Midi Device:</h4></div>
-            <div class="col-sm-3">
-                <h4>BPM:</h4></div>
+            <div class="col-xs-6">
+                <h4>Midi Device:</h4>
+            </div>
+            <div class="col-xs-6">
+                <h4>BPM:</h4>
+            </div>
         </div>
         <div class="row">
-            <div class="col-sm-3">
-                <select id="midiOut" onchange="changeMIDIOut()">
+            <div class="col-xs-6">
+                <select id="midiOut">
                     <option value="">Not connected</option>
                 </select>
             </div>
-            <div class="col-sm-3">
-                <select id="bpm" onchange="changeBPM()">
+            <div class="col-xs-6">
+                <select id="bpm" name="bpm">
                 </select>
             </div>
         </div>
         <br>
         <div class="row">
-            <div class="col-sm-3">
+            <div class="col-xs-6">
                 <button type="button" onclick="play()" class="btn btn-success">Play</button>
+                
+            </div>
+            <div class="col-xs-6">
                 <button type="button" onclick="stop()" class="btn btn-danger">Stop</button>
             </div>
         </div>

@@ -484,8 +484,8 @@ var ITEM_OFFSET = parseInt(37);
 			// Get selected item index
 			var index = (data.options.reset) ? data.options.selectedIndex : o.selectedIndex(data.target[0]);
 			// Set selected item in targeted object
-			jQuery("select#"+data.options.parentId+" option[selected]").removeAttr("selected");
-			jQuery("select#"+data.options.parentId+" option[index=" + index + "]").attr("selected", "selected");
+			jQuery("select#" + data.options.parentId + " option:selected").removeAttr("selected");
+			jQuery("select#" + data.options.parentId + " option:eq(" + index + ")").attr('selected', 'selected');
 			
 			if (!data.options.reset) {
 				// Trigger onchange event manually
@@ -500,8 +500,8 @@ var ITEM_OFFSET = parseInt(37);
 
 		// sets a position object
 		setPosition: function (event, position, index) {
-			position.x = event.pageX;
-			position.y = event.pageY;
+			position.x = event.originalEvent.pageX;
+			position.y = event.originalEvent.pageY;
 			position.time = o.time();
 			position.index = index;
 			return position;
@@ -512,12 +512,12 @@ var ITEM_OFFSET = parseInt(37);
 
 			o.clearInterval(event.data.target);
 
-			if (event.wheelDelta) {
-				delta = event.wheelDelta / (w.opera ? - 120 : 120);
+			if (event.originalEvent.wheelDelta) {
+				delta = event.originalEvent.wheelDelta / (w.opera ? -120 : 120);
 			}
 
-			if (event.detail) {
-				delta = -event.detail / 3;
+			if (event.originalEvent.detail) {
+				delta = -event.originalEvent.detail / 3;
 			}
 
 			if (!event.data.wheelCapture) {
@@ -582,7 +582,7 @@ var ITEM_OFFSET = parseInt(37);
 
 			o.clearInterval(event.data.target);
 
-			var yPos = event.pageY - $(obj).offset().top;
+			var yPos = event.originalEvent.pageY - $(obj).offset().top;
 
 			if (yPos < 60 || yPos > 105) {
 
@@ -611,7 +611,10 @@ var ITEM_OFFSET = parseInt(37);
 
 		// starts the drag operation and binds the mouse move handler
 		start: function (event) {
-
+			if (event.originalEvent.touches) {
+				event.originalEvent.pageX=event.originalEvent.touches[0].pageX;
+				event.originalEvent.pageY=event.originalEvent.touches[0].pageY;
+			}
 			o.clearInterval(event.data.target);
 
 			event.data.startTarget = $(event.target);
@@ -628,7 +631,10 @@ var ITEM_OFFSET = parseInt(37);
 
 		// updates the current scroll location during a mouse move
 		drag: function (event, ml, mt, left, top) {
-
+			if (event.originalEvent.touches) {
+				event.originalEvent.pageX=event.originalEvent.touches[0].pageX;
+				event.originalEvent.pageY=event.originalEvent.touches[0].pageY;
+			}
 			o.normalizeEvent(event);
 
 			event.data.target.data('dragged', true);
@@ -638,11 +644,11 @@ var ITEM_OFFSET = parseInt(37);
 			}
 
 			if (event.data.options.direction !== 'vertical') {
-				this.scrollLeft -= (event.pageX - event.data.position.x);
+				this.scrollLeft -= (event.originalEvent.pageX - event.data.position.x);
 			}
 
 			if (event.data.options.direction !== 'horizontal') {
-				this.scrollTop -= (event.pageY - event.data.position.y);
+				this.scrollTop -= (event.originalEvent.pageY - event.data.position.y);
 			}
 
 			o.moveThumbs(event, this.scrollLeft, this.scrollTop);
@@ -659,8 +665,8 @@ var ITEM_OFFSET = parseInt(37);
 		normalizeEvent: function (event) {
 			if (o.checkIosDevice()) {
 				var iosEvent = event.originalEvent.changedTouches[0];
-				event.pageX = iosEvent.pageX;
-				event.pageY = iosEvent.pageY;
+				event.originalEvent.pageX = iosEvent.pageX;
+				event.originalEvent.pageY = iosEvent.pageY;
 			}
 		},
 
@@ -742,8 +748,8 @@ var ITEM_OFFSET = parseInt(37);
 
 			o.normalizeEvent(event);
 
-			var dx = event.data.options.scrollDelta * (event.pageX - event.data.capture.x),
-				dy = event.data.options.scrollDelta * (event.pageY - event.data.capture.y),
+			var dx = event.data.options.scrollDelta * (event.originalEvent.pageX - event.data.capture.x),
+				dy = event.data.options.scrollDelta * (event.originalEvent.pageY - event.data.capture.y),
 				scrollLeft = target.scrollLeft,
 				scrollTop = target.scrollTop,
 				xMod = dx / o.constants.driftSequences,
