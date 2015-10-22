@@ -1,7 +1,7 @@
 var audioContext = null;
 var midiAccess;
 var midiDevice;
-var bpm = 120;
+var bpm = 128;
 var tempo;
 var scheduler;
 
@@ -13,6 +13,62 @@ var scheduleAheadTime = 0.1;    // How far ahead to schedule audio (sec)
 var nextClockTime = 0.0;     // when the next note is due.
 var startTime = 0;
 var playFlag = false;
+
+var beatCounter = 0;
+
+var notes = {'C4':'60','C#4':'61','D4':'62','D#4':'63',
+'E4':'64','F4':'65','F#4': '66','G4': '67','G#4': '68',
+'A4': '69','A#4': '70','B4': '71','C5': '72','C#5': '73',
+'D5': '74','D#5': '75','E5': '76','F5': '77','F#5': '78',
+'G5': '79','G#5': '80','A5': '81','A#5': '82','B5': '83',
+'': '84',
+'': '85',
+'': '86',
+'': '87',
+'': '88',
+'': '89',
+'': '90',
+'': '91',
+'': '92',
+'': '93',
+'': '94',
+'': '95',
+'': '96',
+'': '97',
+'': '98',
+'': '99',
+'': '100',
+'': '101',
+'': '102',
+'': '103',
+'': '104',
+'': '105',
+'': '106',
+'': '107',
+'': '108',
+'': '109',
+'': '110',
+'': '111',
+'': '112',
+'': '113',
+'': '114',
+'': '115',
+'G#8': '116',
+'A8': '117',
+'A#8': '118',
+'B8': '119',
+'C9': '120',
+'C#9': '121',
+'D9': '122',
+'D#9': '123',
+'E9': '124',
+'F9': '125',
+'F#9': '126',
+'G9': '127'
+};
+
+var note1 = notes['C4'];
+
 
 //Actions to perform on load
 window.addEventListener('load', function() {
@@ -100,8 +156,6 @@ function play() {
     nextClockTime = 0;
     tempo = 60 / bpm / 24;
     startTime = audioContext.currentTime + 0.005;
-    //midiDevice.send([0xF8]);
-    //window.clearTimeout(timerID);
     scheduleClock();
 }
 
@@ -115,23 +169,42 @@ function stop() {
 function scheduleClock() {
     var currentTime = audioContext.currentTime;
     currentTime -= startTime;
+
     while (nextClockTime < currentTime + scheduleAheadTime) {
-        if (playFlag) {
-            setTimeout(function() {
+         if (playFlag) {
+               setTimeout(function() {
+                //send midi clock start only the first beat! 
+                //timeout needed to avoid quick first pulse
                 playFlag = false;
                 midiDevice.send([0xFA]);
                 midiDevice.send([0xF8]);
-            }, currentTime + nextClockTime);   
-        }
-        else {
-            midiDevice.send([0xF8]);
-        }
+            }, currentTime + nextClockTime);
+         }
         advanceClock();
     }
     timerID = window.setTimeout("scheduleClock()", 0);
 }
 
 function advanceClock() {
+    //send midi clock signal
+    midiDevice.send([0xF8]);
+    //advance beat
+    beatCounter++;
+    if (beatCounter == 192) {
+        beatCounter = 0;
+    }
+    //eighth notes
+    if (beatCounter % 12 == 0) {
+        if (note1) {
+            //turn off note
+            midiDevice.send([0x80, note1, 0x40]);
+            //console.log('Stopped note ' + note1);
+        }
+        //turn on note
+        midiDevice.send([0x90, note1, 0x7f]);
+        //console.log('Sent note ' + note1);
+    }
+    //the next clock will be at the next tempo marker
     nextClockTime += tempo;
 }
 

@@ -16,34 +16,34 @@
 </head>
 
 <body>
-    <div class="container clock">
+    <div class="container-fluid clock">
         <h1>Clock Sequencer</h1>
         <div class="row">
-            <div class="col-xs-6">
+            <div class="col-xs-3">
                 <h4>Midi Device:</h4>
             </div>
-            <div class="col-xs-6">
+            <div class="col-xs-3">
                 <h4>BPM:</h4>
             </div>
         </div>
         <div class="row">
-            <div class="col-xs-6">
+            <div class="col-xs-3">
                 <select id="midiOut">
                     <option value="">Not connected</option>
                 </select>
             </div>
-            <div class="col-xs-6">
+            <div class="col-xs-3">
                 <select id="bpm" name="bpm">
                 </select>
             </div>
         </div>
         <br>
         <div class="row">
-            <div class="col-xs-6">
+            <div class="col-xs-3">
                 <button type="button" onclick="play()" class="btn btn-success">Play</button>
                 
             </div>
-            <div class="col-xs-6">
+            <div class="col-xs-3">
                 <button type="button" onclick="stop()" class="btn btn-danger">Stop</button>
             </div>
         </div>
