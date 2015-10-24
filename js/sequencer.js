@@ -11,6 +11,7 @@ var startTime = 0;
 var playPressed = false;
 var isPlaying = false;
 var beatCounter = 0; // Tracks beats in 24ppq, so up to 192 for 8 steps
+var beatDiv = 8; // Divisons of the beat to play
 var stepNum = 0; // Tracks current step (up to 8 steps by default)
 
 //Midi note mappings
@@ -69,6 +70,7 @@ window.addEventListener('load', function() {
     createBPMOptions(document.getElementById("bpm"));
     $('#bpm').val(128);
     document.getElementById("bpm").onchange = changeBPM;
+    document.getElementById("division").onchange = changeDivision;
 
     //initialize the note selectors
     createNoteOptions();
@@ -161,6 +163,11 @@ function changeBPM(e) {
     tempo = 60 / bpm / 24;
 }
 
+//Event handler for beat divison selector update
+function changeDivision() {
+    beatDiv = $('#division').val();
+}
+
 
 //Start the MIDI sequencer clock: Send a Clock Start signal first, 
 //then keep sending Clock signals in tempo
@@ -179,7 +186,6 @@ function play() {
         $('#status').text("Status: Stopped");
         isPlaying = false;
         stop();
-        //return "Play";
     }
     else {
         playPressed = true;
@@ -191,7 +197,6 @@ function play() {
         tempo = 60 / bpm / 24;
         startTime = audioContext.currentTime + 0.005;
         scheduleClock();
-        //return "Stop";
     }
 }
 
@@ -230,8 +235,9 @@ function advanceClock() {
     if (beatCounter >= 192) {
         beatCounter = 0;
     }
-    //eighth notes
-    if (beatCounter % $('#division').val() == 0) {
+
+    //calculate divisions per step
+    if (beatCounter % beatDiv == 0) {
         stepNum++;
         if (stepNum >= 8) {
             stepNum = 0;
@@ -241,18 +247,13 @@ function advanceClock() {
             midiDevice.send([0x80, currentNote, 0x40]);
         }
         
-        sendNoteAtStep(stepNum);
+        //send the current note
+        currentNote =  $("#note" + stepNum).val();
+        midiDevice.send([0x90, currentNote, 0x7f]);
     }
     //the next clock will be at the next tempo marker
     nextClockTime += tempo;
 }
-
-//sends midi note of current step's select box
-function sendNoteAtStep(stepNum) {
-    currentNote =  $("#note" + stepNum).find(":selected").val();
-    midiDevice.send([0x90, currentNote, 0x7f]);
-}
-
 
 //Helper function to create the BPM list
 function createBPMOptions(select) {
