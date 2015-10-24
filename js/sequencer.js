@@ -62,9 +62,34 @@ var currentNote = null; //currently playing note
 //Actions to perform on load
 window.addEventListener('load', function() {
 
+    //Prevent swipe down to refresh in Android Chrome 
+    var lastTouchY = 0;
+    var touchstartHandler = function(e) {
+    if (e.touches.length != 1) return;
+    lastTouchY = e.touches[0].clientY;
+    maybePreventPullToRefresh =
+        preventPullToRefreshCheckbox.checked &&
+        window.pageYOffset == 0;
+    }
+
+    var touchmoveHandler = function(e) {
+        var touchY = e.touches[0].clientY;
+        var touchYDelta = touchY - lastTouchY;
+        lastTouchY = touchY;
+
+        if (touchYDelta > 0) {
+            e.preventDefault();
+            return;
+        }
+    }
+
+    document.addEventListener('touchstart', touchstartHandler, false);
+    document.addEventListener('touchmove', touchmoveHandler, false);
+
+
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
     audioContext = new AudioContext();
-
+    //skin the midi device select dropdown
     $('.selectpicker').selectpicker();
     //initialize BPM range selector list and set default BPM
     createBPMOptions(document.getElementById("bpm"));
@@ -130,16 +155,12 @@ function onMIDISuccess(midi) {
         $('#play').addClass('disabled');
     }
 
-    //style the midi device picker
-    //$('#midiOut').iPhonePicker({ width: '140px', imgRoot: 'images/' });
-
     console.log('Output ', output);
 }
 
 //If request MIDI access failed, log message
 function onMIDIFailure(e) {
     document.getElementById("midiOut").appendChild(new Option("No Device Available", 0, false, false));
-    //$('#midiOut').iPhonePicker({ width: '140px', imgRoot: 'images/' });
     console.log("No access to MIDI devices or your browser doesn't support WebMIDI API." + e);
 }
 
@@ -182,7 +203,7 @@ function play() {
     });
     if (isPlaying) {
         //toggle icon to arrow
-        $('#play').html("&#9658;");
+        $('#play').html("<i class=\"fa fa-play\"></i>");
         $('#status').text("Status: Stopped");
         isPlaying = false;
         stop();
@@ -191,7 +212,7 @@ function play() {
         playPressed = true;
         isPlaying = true;
         //toggle icon to square
-        $('#play').html("&#9609;");
+        $('#play').html("<i class=\"fa fa-stop\"></i>");
         $('#status').text("Status: Playing...");
         nextClockTime = 0;
         tempo = 60 / bpm / 24;
