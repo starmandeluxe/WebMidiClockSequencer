@@ -3,7 +3,6 @@ var midiAccess;
 var midiDevice;
 var bpm = 128; //default beats per minute setting
 var tempo; //tempo in 24ppq
-var scheduler;
 var lookahead = 25.0; // How frequently to call scheduling function (ms)
 var scheduleAheadTime = 0.1; // How far ahead to schedule audio (sec)
 var nextClockTime = 0.0; // when the next note is due.
@@ -57,7 +56,6 @@ var notes = {
 };
 
 var currentNote = null; //currently playing note
-
 
 //Actions to perform on load
 window.addEventListener('load', function() {
@@ -154,8 +152,6 @@ function onMIDISuccess(midi) {
         document.getElementById("midiOut").appendChild(new Option("No Device Available", 0, false, false));
         $('#play').addClass('disabled');
     }
-
-    console.log('Output ', output);
 }
 
 //If request MIDI access failed, log message
@@ -188,7 +184,6 @@ function changeBPM(e) {
 function changeDivision() {
     beatDiv = $('#division').val();
 }
-
 
 //Start the MIDI sequencer clock: Send a Clock Start signal first, 
 //then keep sending Clock signals in tempo
@@ -227,7 +222,7 @@ function stop() {
     window.clearTimeout(timerID);
 }
 
-//shcedules when the next clock should fire
+//schedules when the next clock should fire
 function scheduleClock() {
     var currentTime = audioContext.currentTime;
     currentTime -= startTime;
