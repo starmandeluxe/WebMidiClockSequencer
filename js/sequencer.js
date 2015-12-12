@@ -15,51 +15,41 @@ var stepNum = 0; // Tracks current step (up to 8 steps by default)
 
 //Midi note mappings
 var notes = {
-'C0':'12','C#0':'13','D0':'14','D#0':'15',
-'E0':'16','F0':'17','F#0':'18','G0':'19',
-'G#0':'20','A0':'21','A#0':'22','B0':'23',
-
-'C1':'24','C#1':'25','D1':'26','D#1':'27',
-'E1':'28','F1':'29','F#1':'30','G1':'31',
-'G#1':'32','A1':'33','A#1':'34','B1':'35',
-
-'C2':'36','C#2':'37','D2':'38','D#2':'39',
-'E2':'40','F2':'41','F#2':'42','G2':'43',
-'G#2':'44','A2':'45','A#2':'46','B2':'47',
-
-'C3':'48','C#3':'49','D3':'50','D#3':'51',
-'E3':'52','F3':'53','F#3':'54','G3':'55',
-'G#3':'56','A3':'57','A#3':'58','B3':'59',
-
-'C4':'60','C#4':'61','D4':'62','D#4':'63',
-'E4':'64','F4':'65','F#4': '66','G4': '67',
-'G#4':'68','A4':'69','A#4':'70','B4':'71',
-
-'C5':'72','C#5':'73','D5':'74','D#5':'75',
-'E5':'76','F5':'77','F#5':'78','G5':'79',
-'G#5':'80','A5':'81','A#5':'82','B5':'83',
-
-'C6':'84','C#6':'85','D6':'86','D#6':'87',
-'E6':'88','F6':'89','F#6':'90','G6':'91',
-'G#6':'92','A6':'93','A#6':'94','B6':'95',
-
-'C7':'96','C#7':'97','D7':'98','D#7':'99',
-'E7':'100','F7':'101','F#7':'102','G7':'103',
-'G#7':'104','A7':'105','A#7':'106','B7':'107',
-
-'C8':'108','C#8':'109','D8':'110','D#8':'111',
-'E8':'112','F8':'113','F#8':'114','G8':'115',
-'G#8':'116','A8':'117','A#8':'118','B8':'119',
-
-'C9':'120','C#9':'121','D9':'122','D#9':'123',
-'E9':'124','F9':'125','F#9':'126','G9':'127'
+'G9':'127','F#9':'126','F9':'125','E9':'124','D#9':'123',
+'D9':'122','C#9':'121','C9':'120','B8':'119','A#8':'118',
+'A8':'117','G#8':'116','G8':'115','F#8':'114','F8':'113',
+'E8':'112','D#8':'111','D8':'110','C#8':'109','C8':'108',
+'B7':'107','A#7':'106','A7':'105','G#7':'104','G7':'103',
+'F#7':'102','F7':'101','E7':'100','D#7':'99','D7':'98',
+'C#7':'97','C7':'96','B6':'95','A#6':'94','A6':'93',
+'G#6':'92','G6':'91','F#6':'90','F6':'89','E6':'88',
+'D#6':'87','D6':'86','C#6':'85','C6':'84','B5':'83',
+'A#5':'82','A5':'81','G#5':'80','G5':'79','F#5':'78',
+'F5':'77','E5':'76','D#5':'75','D5':'74','C#5':'73',
+'C5':'72','B4':'71','A#4':'70','A4':'69','G#4':'68',
+'G4':'67','F#4':'66','F4':'65','E4':'64','D#4':'63',
+'D4':'62','C#4':'61','C4':'60','B3':'59','A#3':'58',
+'A3':'57','G#3':'56','G3':'55','F#3':'54','F3':'53',
+'E3':'52','D#3':'51','D3':'50','C#3':'49','C3':'48',
+'B2':'47','A#2':'46','A2':'45','G#2':'44','G2':'43',
+'F#2':'42','F2':'41','E2':'40','D#2':'39','D2':'38',
+'C#2':'37','C2':'36','B1':'35','A#1':'34','A1':'33',
+'G#1':'32','G1':'31','F#1':'30','F1':'29','E1':'28',
+'D#1':'27','D1':'26','C#1':'25','C1':'24','B0':'23',
+'A#0':'22','A0':'21','G#0':'20','G0':'19','F#0':'18',
+'F0':'17','E0':'16','D#0':'15','D0':'14','C#0':'13',
+'C0':'12'
 };
 
 var currentNote = null; //currently playing note
 
 //Actions to perform on load
 window.addEventListener('load', function() {
-
+    //load button icons
+    $('#play').html("<i class=\"fa fa-stop\"></i>");
+    $('#play').html("<i class=\"fa fa-play\"></i>");
+    $('#octaveUpAll').html("<i class=\"fa fa-chevron-up\"></i>");
+    $('#octaveDownAll').html("<i class=\"fa fa-chevron-down\"></i>");
     //Prevent swipe down to refresh in Android Chrome 
     var lastTouchY = 0;
     var touchstartHandler = function(e) {
@@ -84,6 +74,20 @@ window.addEventListener('load', function() {
     document.addEventListener('touchstart', touchstartHandler, false);
     document.addEventListener('touchmove', touchmoveHandler, false);
 
+    //set button press functions
+    $('#play').click(play);
+    $('#octaveUpAll').click(octaveUpAll);
+    $('#octaveDownAll').click(octaveDownAll);
+    $('[id^=octUp]').click(octaveUpSingle);
+    $('[id^=octDown]').click(octaveDownSingle);
+    document.getElementById("octaveUpAll").addEventListener("touchend", function(e) {
+      e.preventDefault();
+      octaveUpAll();
+    }, false);
+    document.getElementById("octaveDownAll").addEventListener("touchend", function(e) {
+      e.preventDefault();
+      octaveDownAll();
+    }, false);
 
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
     audioContext = new AudioContext();
@@ -192,14 +196,14 @@ function play() {
         window.alert("A midi device must be selected in order to play the sequencer.");
         return;
     }
-    $('#play').toggleClass("btn-danger btn-success");
+    $('#play').toggleClass("red blue");
     $('#play').focus(function() {
         this.blur();
     });
     if (isPlaying) {
         //toggle icon to arrow
         $('#play').html("<i class=\"fa fa-play\"></i>");
-        $('#status').text("Status: Stopped");
+        $('#status').text("Stopped");
         isPlaying = false;
         stop();
     }
@@ -208,7 +212,7 @@ function play() {
         isPlaying = true;
         //toggle icon to square
         $('#play').html("<i class=\"fa fa-stop\"></i>");
-        $('#status').text("Status: Playing...");
+        $('#status').text("Playing...");
         nextClockTime = 0;
         tempo = 60 / bpm / 24;
         startTime = audioContext.currentTime + 0.005;
@@ -271,6 +275,60 @@ function advanceClock() {
     nextClockTime += tempo;
 }
 
+function octaveUpAll() {
+    $("[id^=note]").each(function() {
+        if (this.selectedIndex - 12 >= 0) {
+            this.selectedIndex -= 12;
+        }
+        else {
+            this.selectedIndex = 0;
+        }
+    });
+    $("[id^=note]").iPhonePickerRefresh();
+
+}
+
+function octaveDownAll() {
+    $("[id^=note]").each(function() {
+        if (this.selectedIndex + 12 < this.options.length) {
+            this.selectedIndex += 12;
+        }
+        else {
+            this.selectedIndex = this.options.length - 1;
+        }
+    });
+    $("[id^=note]").iPhonePickerRefresh();
+
+}
+
+function octaveUpSingle() {
+    var noteIndex = this.id.replace('octUp', "");
+    $("#note" + noteIndex).each(function() {
+        if (this.selectedIndex - 12 >= 0) {
+            this.selectedIndex -= 12;
+        }
+        else {
+            this.selectedIndex = 0;
+        }
+    });
+    $("#note" + noteIndex).iPhonePickerRefresh();
+
+}
+
+function octaveDownSingle() {
+    var noteIndex = this.id.replace('octDown', "");
+    $("#note" + noteIndex).each(function() {
+        if (this.selectedIndex + 12 < this.options.length) {
+            this.selectedIndex += 12;
+        }
+        else {
+            this.selectedIndex = this.options.length - 1;
+        }
+    });
+    $("#note" + noteIndex).iPhonePickerRefresh();
+
+}
+
 //Helper function to create the BPM list
 function createBPMOptions(select) {
     for (var i = 60; i < 200; i++) {
@@ -281,7 +339,7 @@ function createBPMOptions(select) {
 //populate the note dropdowns
 function createNoteOptions() {
     var selects = $('[id^=note]');
-    for (i = 0; i < selects.length; i++) {
+    for (var i = 0; i < selects.length; i++) {
         for(var key in notes) {
           createNoteOption(selects[i], key);
         }

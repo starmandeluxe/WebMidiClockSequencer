@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Clock Sequencer</title>
+    <title>MIDI Sequencer</title>
     <meta http-equiv="Cache-control" content="no-cache" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap core CSS -->
@@ -11,42 +11,51 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="../css/bootstrap-select.min.css" rel="stylesheet">
     <link href="../css/footer.css" rel="stylesheet">
+    <link href="../css/graphics.css" rel="stylesheet">
+    <link href="../css/push_button.css" rel="stylesheet">
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../js/bootstrap-select.min.js"></script>
     <script type="text/javascript" src="../js/jquery.iphonepicker.js"></script>
     <script type="text/javascript" src="js/sequencer.js"></script>
-
     <style>
-        body  {
-            background-image: url("../img/flip_the_color_on_the_grid.jpg");
-            background-color: #cccccc;
-        }
+    body {
+/*        background-image: url("../img/");*/
+        background-color: #FFFFFF;
+    }
     </style>
 </head>
 
 <body>
     <div class="container-fluid clock">
-        <h1>Clock Sequencer</h1>
         <div class="row">
-            <div class="col-xs-12 col-md-12">
+            <div class="col-xs-12 col-md-12 col-centered text-center">
+                <h1>MIDI Sequencer</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-md-12 col-centered text-center">
                 <select id="midiOut" class="selectpicker">
                     <option value="">Not connected</option>
                 </select>
             </div>
         </div>
         <div class="row">
+            <div class="col-md-4"></div>
+            
             <div class="col-xs-3 col-md-1">
-                <h4>BPM</h4>
+                <h3>BPM</h3>
             </div>
             <div class="col-xs-3 col-md-1">
-            <h4>Beat Division</h4>
+                <h3>Divide</h3>
             </div>
             <div class="col-xs-3 col-md-2">
-                <h4 id="status">Status: Stopped</h4>
+                <h3 style="margin-left:10px;">Control</h3>
             </div>
+            <div class="col-md-4"></div>
         </div>
         <div class="row">
+            <div class="col-md-4"></div>
             <div class="col-xs-3 col-md-1">
                 <select id="bpm" name="bpm"></select>
             </div>
@@ -59,97 +68,138 @@
                     <option value="3">32nd</option>
                 </select>
             </div>
-            <div class="col-xs-3 col-md-1">
-                <button id="play" type="button" onclick="play()" class="btn btn-lg btn-success">&#9654;</button>
+             <div class="col-xs-3 col-md-2">
+                <a id="play" href="#" class="push_button blue" style="margin-top:35px;"></a>
             </div>
-            <div class="col-md-2"></div>
+            <div class="col-md-4"></div>
         </div>
         <br>
         <div class="row">
-            <div class="col-md-3"></div>
-            <div class="col-xs-6 col-md-3">
-                <div class="row">
-                    <div class="col-xs-3 col-md-3">
-
-                    </div>
-                    <div class="col-xs-3 col-md-3">
-
-                    </div>
-                    <div class="col-xs-3 col-md-3">
-
-                    </div>
-                    <div class="col-xs-3 col-md-3">
-
-                    </div>
-                </div>
-            </div> 
-            <div class="col-xs-6 col-md-3">
-                <div class="row">
-                    <div class="col-xs-3 col-md-3">
-
-                    </div>
-                    <div class="col-xs-3 col-md-3">
-
-                    </div>
-                    <div class="col-xs-3 col-md-3">
-
-                    </div>
-                    <div class="col-xs-3 col-md-3">
-
-                    </div>
+            <div class="col-xs-4 col-md-2 col-lg-2">
+            </div>
+            <div class="col-xs-1 col-md-2 col-lg-1">
+                <div class="image" style="margin-top:30px;margin-left:7px;">
+                    <img id="octUp0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAA2FBMVEUAAAA0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw1Xz6fAAAAR3RSTlMAAQIEBQwOERIVFxslJicpKywuMDEyNTY3ODk6PT9ARUpLT1BVVlhZW15fYWJjZGeDhZKVm7K1yMzP0dPe4uTo6+3v9ff7/fnonpQAAAC6SURBVBgZXcEJO0JRFIbR72SWIi6ZM4UiklldF1e9//8f2e3Ok2otubDdySDrJEFj5U+idE3RPRNacndMacisM3LbYqQkhRR3JB3jekGbuH2ZA9yGHhjakasy1NYHZktRgnlXDoOKzOmJTGUAub5gV+YczmQOIdMLJJLqmAtJe/CsG+iXdI27UrkPDS1jukRdzJL0xIxHSfMpU3pzMqu/TMhX5BbfGHtdUFS4/MF914P+hWKt2awVg9wfy5VDXy3ewk0AAAAASUVORK5CYII=" alt="OctUp">
                 </div>
             </div>
-            <div class="col-md-3"></div>
+            <div class="col-xs-1 col-md-2 col-lg-1">
+                <div class="image" style="margin-top:30px;margin-left:7px;">
+                    <img id="octUp1" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAA2FBMVEUAAAA0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw1Xz6fAAAAR3RSTlMAAQIEBQwOERIVFxslJicpKywuMDEyNTY3ODk6PT9ARUpLT1BVVlhZW15fYWJjZGeDhZKVm7K1yMzP0dPe4uTo6+3v9ff7/fnonpQAAAC6SURBVBgZXcEJO0JRFIbR72SWIi6ZM4UiklldF1e9//8f2e3Ok2otubDdySDrJEFj5U+idE3RPRNacndMacisM3LbYqQkhRR3JB3jekGbuH2ZA9yGHhjakasy1NYHZktRgnlXDoOKzOmJTGUAub5gV+YczmQOIdMLJJLqmAtJe/CsG+iXdI27UrkPDS1jukRdzJL0xIxHSfMpU3pzMqu/TMhX5BbfGHtdUFS4/MF914P+hWKt2awVg9wfy5VDXy3ewk0AAAAASUVORK5CYII=" alt="OctUp">
+                </div>
+            </div>
+            <div class="col-xs-1 col-md-2 col-lg-1">
+                <div class="image" style="margin-top:30px;margin-left:7px;">
+                    <img id="octUp2" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAA2FBMVEUAAAA0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw1Xz6fAAAAR3RSTlMAAQIEBQwOERIVFxslJicpKywuMDEyNTY3ODk6PT9ARUpLT1BVVlhZW15fYWJjZGeDhZKVm7K1yMzP0dPe4uTo6+3v9ff7/fnonpQAAAC6SURBVBgZXcEJO0JRFIbR72SWIi6ZM4UiklldF1e9//8f2e3Ok2otubDdySDrJEFj5U+idE3RPRNacndMacisM3LbYqQkhRR3JB3jekGbuH2ZA9yGHhjakasy1NYHZktRgnlXDoOKzOmJTGUAub5gV+YczmQOIdMLJJLqmAtJe/CsG+iXdI27UrkPDS1jukRdzJL0xIxHSfMpU3pzMqu/TMhX5BbfGHtdUFS4/MF914P+hWKt2awVg9wfy5VDXy3ewk0AAAAASUVORK5CYII=" alt="OctUp">
+                </div>
+            </div>
+            <div class="col-xs-1 col-md-2 col-lg-1">
+                <div class="image" style="margin-top:30px;margin-left:7px;">
+                    <img id="octUp3" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAA2FBMVEUAAAA0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw1Xz6fAAAAR3RSTlMAAQIEBQwOERIVFxslJicpKywuMDEyNTY3ODk6PT9ARUpLT1BVVlhZW15fYWJjZGeDhZKVm7K1yMzP0dPe4uTo6+3v9ff7/fnonpQAAAC6SURBVBgZXcEJO0JRFIbR72SWIi6ZM4UiklldF1e9//8f2e3Ok2otubDdySDrJEFj5U+idE3RPRNacndMacisM3LbYqQkhRR3JB3jekGbuH2ZA9yGHhjakasy1NYHZktRgnlXDoOKzOmJTGUAub5gV+YczmQOIdMLJJLqmAtJe/CsG+iXdI27UrkPDS1jukRdzJL0xIxHSfMpU3pzMqu/TMhX5BbfGHtdUFS4/MF914P+hWKt2awVg9wfy5VDXy3ewk0AAAAASUVORK5CYII=" alt="OctUp">
+                </div>
+            </div>
+            <div class="col-xs-1 col-md-2 col-lg-1">
+                <div class="image" style="margin-top:30px;margin-left:7px;">
+                    <img id="octUp4" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAA2FBMVEUAAAA0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw1Xz6fAAAAR3RSTlMAAQIEBQwOERIVFxslJicpKywuMDEyNTY3ODk6PT9ARUpLT1BVVlhZW15fYWJjZGeDhZKVm7K1yMzP0dPe4uTo6+3v9ff7/fnonpQAAAC6SURBVBgZXcEJO0JRFIbR72SWIi6ZM4UiklldF1e9//8f2e3Ok2otubDdySDrJEFj5U+idE3RPRNacndMacisM3LbYqQkhRR3JB3jekGbuH2ZA9yGHhjakasy1NYHZktRgnlXDoOKzOmJTGUAub5gV+YczmQOIdMLJJLqmAtJe/CsG+iXdI27UrkPDS1jukRdzJL0xIxHSfMpU3pzMqu/TMhX5BbfGHtdUFS4/MF914P+hWKt2awVg9wfy5VDXy3ewk0AAAAASUVORK5CYII=" alt="OctUp">
+                </div>
+            </div>
+            <div class="col-xs-1 col-md-2 col-lg-1">
+                <div class="image" style="margin-top:30px;margin-left:7px;">
+                    <img id="octUp5" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAA2FBMVEUAAAA0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw1Xz6fAAAAR3RSTlMAAQIEBQwOERIVFxslJicpKywuMDEyNTY3ODk6PT9ARUpLT1BVVlhZW15fYWJjZGeDhZKVm7K1yMzP0dPe4uTo6+3v9ff7/fnonpQAAAC6SURBVBgZXcEJO0JRFIbR72SWIi6ZM4UiklldF1e9//8f2e3Ok2otubDdySDrJEFj5U+idE3RPRNacndMacisM3LbYqQkhRR3JB3jekGbuH2ZA9yGHhjakasy1NYHZktRgnlXDoOKzOmJTGUAub5gV+YczmQOIdMLJJLqmAtJe/CsG+iXdI27UrkPDS1jukRdzJL0xIxHSfMpU3pzMqu/TMhX5BbfGHtdUFS4/MF914P+hWKt2awVg9wfy5VDXy3ewk0AAAAASUVORK5CYII=" alt="OctUp">
+                </div>
+            </div>
+            <div class="col-xs-1 col-md-2 col-lg-1">
+                <div class="image" style="margin-top:30px;margin-left:7px;">
+                    <img id="octUp6" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAA2FBMVEUAAAA0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw1Xz6fAAAAR3RSTlMAAQIEBQwOERIVFxslJicpKywuMDEyNTY3ODk6PT9ARUpLT1BVVlhZW15fYWJjZGeDhZKVm7K1yMzP0dPe4uTo6+3v9ff7/fnonpQAAAC6SURBVBgZXcEJO0JRFIbR72SWIi6ZM4UiklldF1e9//8f2e3Ok2otubDdySDrJEFj5U+idE3RPRNacndMacisM3LbYqQkhRR3JB3jekGbuH2ZA9yGHhjakasy1NYHZktRgnlXDoOKzOmJTGUAub5gV+YczmQOIdMLJJLqmAtJe/CsG+iXdI27UrkPDS1jukRdzJL0xIxHSfMpU3pzMqu/TMhX5BbfGHtdUFS4/MF914P+hWKt2awVg9wfy5VDXy3ewk0AAAAASUVORK5CYII=" alt="OctUp">
+                </div>
+            </div>
+            <div class="col-xs-1 col-md-2 col-lg-1">
+                <div class="image" style="margin-top:30px;margin-left:7px;">
+                    <img id="octUp7" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAA2FBMVEUAAAA0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw1Xz6fAAAAR3RSTlMAAQIEBQwOERIVFxslJicpKywuMDEyNTY3ODk6PT9ARUpLT1BVVlhZW15fYWJjZGeDhZKVm7K1yMzP0dPe4uTo6+3v9ff7/fnonpQAAAC6SURBVBgZXcEJO0JRFIbR72SWIi6ZM4UiklldF1e9//8f2e3Ok2otubDdySDrJEFj5U+idE3RPRNacndMacisM3LbYqQkhRR3JB3jekGbuH2ZA9yGHhjakasy1NYHZktRgnlXDoOKzOmJTGUAub5gV+YczmQOIdMLJJLqmAtJe/CsG+iXdI27UrkPDS1jukRdzJL0xIxHSfMpU3pzMqu/TMhX5BbfGHtdUFS4/MF914P+hWKt2awVg9wfy5VDXy3ewk0AAAAASUVORK5CYII=" alt="OctUp">
+                </div>
+            </div>            
         </div>
         <br>
         <div class="row">
-            <div class="col-md-3"></div>
-            <div class="col-xs-6 col-md-3">
-                <div class="row">
-                    <div class="col-xs-3 col-md-3">
-                        <select id="note0">
-                        </select>
+                    <div class="col-xs-4 col-md-2 col-lg-2">
+                        <a id="octaveUpAll" href="#" class="push_button blue"></a>
+                        <a id="octaveDownAll" href="#" class="push_button blue"></a>
                     </div>
-                    <div class="col-xs-3 col-md-3">
-                        <select id="note1">
-                        </select>
+                    <div class="col-xs-1 col-md-2 col-lg-1">
+                        <select id="note0"></select>
                     </div>
-                    <div class="col-xs-3 col-md-3">
-                        <select id="note2">
-                        </select>
+                    <div class="col-xs-1 col-md-2 col-lg-1">
+                        <select id="note1"></select>
                     </div>
-                    <div class="col-xs-3 col-md-3">
-                        <select id="note3">
-                        </select>
+                    <div class="col-xs-1 col-md-2 col-lg-1">
+                        <select id="note2"></select>
                     </div>
-                </div>
-            </div> 
-            <div class="col-xs-6 col-md-3">
-                <div class="row">
-                    <div class="col-xs-3 col-md-3">
-                        <select id="note4">
-                        </select>
+                    <div class="col-xs-1 col-md-2 col-lg-1">
+                        <select id="note3"></select>
                     </div>
-                    <div class="col-xs-3 col-md-3">
-                        <select id="note5">
-                        </select>
+                    <div class="col-xs-1 col-md-2 col-lg-1">
+                        <select id="note4"></select>
                     </div>
-                    <div class="col-xs-3 col-md-3">
-                        <select id="note6">
-                        </select>
+                    <div class="col-xs-1 col-md-2 col-lg-1">
+                        <select id="note5"></select>
                     </div>
-                    <div class="col-xs-3 col-md-3">
-                        <select id="note7">
-                        </select>
+                    <div class="col-xs-1 col-md-2 col-lg-1">
+                        <select id="note6"></select>
                     </div>
+                    <div class="col-xs-1 col-md-2 col-lg-1">
+                        <select id="note7"></select>
+                    </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4 col-md-2 col-lg-2">
+            </div>
+            <div class="col-xs-1 col-md-2 col-lg-1">
+                <div class="image" style="margin-top:10px;margin-left:7px;">
+                    <img id="octDown0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAxlBMVEUAAAA0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdz9TyvAAAAAQXRSTlMAAQIDBAYHCAkKCw4VGhwkJio7PkdMTldcaWtvgIOJjo+SlJWio6WmqKqwsrW3urzAzM/R1dna3ODi5Obz9ff5/QxS3+UAAADBSURBVBgZXcELW8FQAMfhn3NmG6ZSVLroQleETFO6/b//l3J2PPaM98WrX6zkrLp1CucqnLFhnlTyYMj1teMWp6M9bQh+tOfbciKpl0zlTZOepGP60hXYiZw3C9fSPZmUAHYsjQxwIH3wJ82qgBm+GqA6k375kvQeAsYA4VzSJ49y0ggvSuUMOFVuEePEC+U6xPKyGtQy5f4juJS3bDSW8rpAZaId4wpOlKpkHuLZOxVuDFtHL/KeDykLmq1WM2BjDflVPCqL7/aCAAAAAElFTkSuQmCC" alt="OctDown">
                 </div>
             </div>
-            <div class="col-md-3"></div>
+            <div class="col-xs-1 col-md-2 col-lg-1">
+                <div class="image" style="margin-top:10px;margin-left:7px;">
+                    <img id="octDown1" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAxlBMVEUAAAA0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdz9TyvAAAAAQXRSTlMAAQIDBAYHCAkKCw4VGhwkJio7PkdMTldcaWtvgIOJjo+SlJWio6WmqKqwsrW3urzAzM/R1dna3ODi5Obz9ff5/QxS3+UAAADBSURBVBgZXcELW8FQAMfhn3NmG6ZSVLroQleETFO6/b//l3J2PPaM98WrX6zkrLp1CucqnLFhnlTyYMj1teMWp6M9bQh+tOfbciKpl0zlTZOepGP60hXYiZw3C9fSPZmUAHYsjQxwIH3wJ82qgBm+GqA6k375kvQeAsYA4VzSJ49y0ggvSuUMOFVuEePEC+U6xPKyGtQy5f4juJS3bDSW8rpAZaId4wpOlKpkHuLZOxVuDFtHL/KeDykLmq1WM2BjDflVPCqL7/aCAAAAAElFTkSuQmCC" alt="OctDown">
+                </div>
+            </div>
+            <div class="col-xs-1 col-md-2 col-lg-1">
+                <div class="image" style="margin-top:10px;margin-left:7px;">
+                    <img id="octDown2" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAxlBMVEUAAAA0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdz9TyvAAAAAQXRSTlMAAQIDBAYHCAkKCw4VGhwkJio7PkdMTldcaWtvgIOJjo+SlJWio6WmqKqwsrW3urzAzM/R1dna3ODi5Obz9ff5/QxS3+UAAADBSURBVBgZXcELW8FQAMfhn3NmG6ZSVLroQleETFO6/b//l3J2PPaM98WrX6zkrLp1CucqnLFhnlTyYMj1teMWp6M9bQh+tOfbciKpl0zlTZOepGP60hXYiZw3C9fSPZmUAHYsjQxwIH3wJ82qgBm+GqA6k375kvQeAsYA4VzSJ49y0ggvSuUMOFVuEePEC+U6xPKyGtQy5f4juJS3bDSW8rpAZaId4wpOlKpkHuLZOxVuDFtHL/KeDykLmq1WM2BjDflVPCqL7/aCAAAAAElFTkSuQmCC" alt="OctDown">
+                </div>
+            </div>
+            <div class="col-xs-1 col-md-2 col-lg-1">
+                <div class="image" style="margin-top:10px;margin-left:7px;">
+                    <img id="octDown3" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAxlBMVEUAAAA0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdz9TyvAAAAAQXRSTlMAAQIDBAYHCAkKCw4VGhwkJio7PkdMTldcaWtvgIOJjo+SlJWio6WmqKqwsrW3urzAzM/R1dna3ODi5Obz9ff5/QxS3+UAAADBSURBVBgZXcELW8FQAMfhn3NmG6ZSVLroQleETFO6/b//l3J2PPaM98WrX6zkrLp1CucqnLFhnlTyYMj1teMWp6M9bQh+tOfbciKpl0zlTZOepGP60hXYiZw3C9fSPZmUAHYsjQxwIH3wJ82qgBm+GqA6k375kvQeAsYA4VzSJ49y0ggvSuUMOFVuEePEC+U6xPKyGtQy5f4juJS3bDSW8rpAZaId4wpOlKpkHuLZOxVuDFtHL/KeDykLmq1WM2BjDflVPCqL7/aCAAAAAElFTkSuQmCC" alt="OctDown">
+                </div>
+            </div>
+            <div class="col-xs-1 col-md-2 col-lg-1">
+                <div class="image" style="margin-top:10px;margin-left:7px;">
+                    <img id="octDown4" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAxlBMVEUAAAA0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdz9TyvAAAAAQXRSTlMAAQIDBAYHCAkKCw4VGhwkJio7PkdMTldcaWtvgIOJjo+SlJWio6WmqKqwsrW3urzAzM/R1dna3ODi5Obz9ff5/QxS3+UAAADBSURBVBgZXcELW8FQAMfhn3NmG6ZSVLroQleETFO6/b//l3J2PPaM98WrX6zkrLp1CucqnLFhnlTyYMj1teMWp6M9bQh+tOfbciKpl0zlTZOepGP60hXYiZw3C9fSPZmUAHYsjQxwIH3wJ82qgBm+GqA6k375kvQeAsYA4VzSJ49y0ggvSuUMOFVuEePEC+U6xPKyGtQy5f4juJS3bDSW8rpAZaId4wpOlKpkHuLZOxVuDFtHL/KeDykLmq1WM2BjDflVPCqL7/aCAAAAAElFTkSuQmCC" alt="OctDown">
+                </div>
+            </div>
+            <div class="col-xs-1 col-md-2 col-lg-1">
+                <div class="image" style="margin-top:10px;margin-left:7px;">
+                    <img id="octDown5" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAxlBMVEUAAAA0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdz9TyvAAAAAQXRSTlMAAQIDBAYHCAkKCw4VGhwkJio7PkdMTldcaWtvgIOJjo+SlJWio6WmqKqwsrW3urzAzM/R1dna3ODi5Obz9ff5/QxS3+UAAADBSURBVBgZXcELW8FQAMfhn3NmG6ZSVLroQleETFO6/b//l3J2PPaM98WrX6zkrLp1CucqnLFhnlTyYMj1teMWp6M9bQh+tOfbciKpl0zlTZOepGP60hXYiZw3C9fSPZmUAHYsjQxwIH3wJ82qgBm+GqA6k375kvQeAsYA4VzSJ49y0ggvSuUMOFVuEePEC+U6xPKyGtQy5f4juJS3bDSW8rpAZaId4wpOlKpkHuLZOxVuDFtHL/KeDykLmq1WM2BjDflVPCqL7/aCAAAAAElFTkSuQmCC" alt="OctDown">
+                </div>
+            </div>
+            <div class="col-xs-1 col-md-2 col-lg-1">
+                <div class="image" style="margin-top:10px;margin-left:7px;">
+                    <img id="octDown6" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAxlBMVEUAAAA0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdz9TyvAAAAAQXRSTlMAAQIDBAYHCAkKCw4VGhwkJio7PkdMTldcaWtvgIOJjo+SlJWio6WmqKqwsrW3urzAzM/R1dna3ODi5Obz9ff5/QxS3+UAAADBSURBVBgZXcELW8FQAMfhn3NmG6ZSVLroQleETFO6/b//l3J2PPaM98WrX6zkrLp1CucqnLFhnlTyYMj1teMWp6M9bQh+tOfbciKpl0zlTZOepGP60hXYiZw3C9fSPZmUAHYsjQxwIH3wJ82qgBm+GqA6k375kvQeAsYA4VzSJ49y0ggvSuUMOFVuEePEC+U6xPKyGtQy5f4juJS3bDSW8rpAZaId4wpOlKpkHuLZOxVuDFtHL/KeDykLmq1WM2BjDflVPCqL7/aCAAAAAElFTkSuQmCC" alt="OctDown">
+                </div>
+            </div>
+            <div class="col-xs-1 col-md-2 col-lg-1">
+                <div class="image" style="margin-top:10px;margin-left:7px;">
+                    <img id="octDown7" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAxlBMVEUAAAA0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdw0sdz9TyvAAAAAQXRSTlMAAQIDBAYHCAkKCw4VGhwkJio7PkdMTldcaWtvgIOJjo+SlJWio6WmqKqwsrW3urzAzM/R1dna3ODi5Obz9ff5/QxS3+UAAADBSURBVBgZXcELW8FQAMfhn3NmG6ZSVLroQleETFO6/b//l3J2PPaM98WrX6zkrLp1CucqnLFhnlTyYMj1teMWp6M9bQh+tOfbciKpl0zlTZOepGP60hXYiZw3C9fSPZmUAHYsjQxwIH3wJ82qgBm+GqA6k375kvQeAsYA4VzSJ49y0ggvSuUMOFVuEePEC+U6xPKyGtQy5f4juJS3bDSW8rpAZaId4wpOlKpkHuLZOxVuDFtHL/KeDykLmq1WM2BjDflVPCqL7/aCAAAAAElFTkSuQmCC" alt="OctDown">
+                </div>
+            </div>            
         </div>
         <br>
     </div>
     <footer class="page-row">
-        <p class="text-muted credit" style="float: right;">Copyright &copy;<script>document.write(new Date().getFullYear())</script> by <a href="http://www.alexkort.com">Alex Kort</a>. All Rights Reserved.</p>
+        <p class="text-muted credit" style="float: right;">Copyright &copy;
+            <script>
+            document.write(new Date().getFullYear())
+            </script> by <a href="http://www.alexkort.com">Alex Kort</a>. All Rights Reserved.</p>
     </footer>
 </body>
 
